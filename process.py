@@ -8,9 +8,11 @@ from pythainlp.tokenize import word_tokenize
 from pythainlp.ulmfit import pre_rules_th,post_rules_th
 from typing import Collection, Callable
 
-__all__ = ['process_thai']
+__all__ = ['process_thai',
+          'pre_rules_th','pre_rules_th_sparse',
+          'post_rules_th','post_rules_th_sparse']
 
-#temporary fix before next pythainlp
+#Rules for sparse models
 from fastai.text import TK_REP, TK_WREP
 import re
 def replace_rep_nonum(text: str) -> str:
@@ -24,7 +26,7 @@ def replace_rep_nonum(text: str) -> str:
         return f"{c} {TK_REP} "
     re_rep = re.compile(r"(\S)(\1{3,})")
     return re_rep.sub(_replace_rep, text)
-pre_rules_th = [pre_rules_th[0]] + [replace_rep_nonum] + pre_rules_th[2:]
+pre_rules_th_sparse = [pre_rules_th[0]] + [replace_rep_nonum] + pre_rules_th[2:]
 
 def replace_wrep_post_nonum(toks:Collection):
     """Replace reptitive words post tokenization; 
@@ -51,10 +53,11 @@ def remove_space(toks:Collection):
     for t in toks:
         if t!=' ': res.append(t)
     return res
-post_rules_th = post_rules_th + [replace_wrep_post_nonum, remove_space] 
 
-def process_thai(text: str, pre_rules: Collection = pre_rules_th, tok_func: Callable = word_tokenize,
-                post_rules: Collection = post_rules_th) -> Collection[str]:
+post_rules_th_sparse = post_rules_th + [replace_wrep_post_nonum, remove_space] 
+
+def process_thai(text: str, pre_rules: Collection = pre_rules_th_sparse, tok_func: Callable = word_tokenize,
+                post_rules: Collection = post_rules_th_sparse) -> Collection[str]:
     """
     process Thai text with the same convention as thai2fit as default
     :param str text: text to be cleaned
