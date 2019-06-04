@@ -1,5 +1,5 @@
-# nlp-toolbelt
-NLP utility functions
+# explore_text
+Data exploration and utility function for Thai texts
 
 ## Process
 * `process_thai` - process Thai texts with the same rules as thai2fit
